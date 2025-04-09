@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Titles | Achievements</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-space text-light font-inter">
+    <%- include('../partials/header.ejs') %>
+
+        <section class="container mx-auto px-4 py-12">
+            <h1 class="text-4xl md:text-5xl font-cinzel text-center text-gold mb-12">
+                🛡️ Titles Unlocked
+            </h1>
+
+            <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <% const titles=[ { name: "HTML Knight" , level: 85,
+                    description: "Forged solid structures with semantic precision." , icon: "fa-code" , type: "fas" }, {
+                    name: "CSS Enchanter" , level: 75, description: "Weaved responsive spells with Flex & Grid." ,
+                    icon: "fa-paint-brush" , type: "fas" }, { name: "JavaScript Rogue" , level: 90,
+                    description: "Mastered DOM sorcery and stealthy callbacks." , icon: "fa-js" , type: "fab" }, {
+                    name: "Node.js Warrior" , level: 70, description: "Built back-end defenses and RESTful attacks." ,
+                    icon: "fa-server" , type: "fas" }, { name: "Express Courier" , level: 80,
+                    description: "Delivered data swiftly across routes." , icon: "fa-route" , type: "fas" }, {
+                    name: "Tailwind Alchemist" , level: 65,
+                    description: "Conjured pixel-perfect designs with utility potions." , icon: "fa-wind" , type: "fas"
+                    },  {name: "PostgreSQL Sage" , level: 95,
+                    description: "Conjured data spells and mastered relational magic." , icon: "fa-database" , type: "fas" }]; %>
+
+                    <% titles.forEach(title=> { %>
+                        <div
+                            class="bg-steel/80 backdrop-blur-md p-6 rounded-2xl border border-gold/10 shadow-lg hover:scale-[1.02] hover:border-gold/30 hover:shadow-gold/20 transition-all duration-300 group">
+                            <div class="flex items-center mb-4">
+                                <div
+                                    class="bg-arcane/20 p-3 rounded-lg mr-4 group-hover:bg-arcane/30 transition-colors duration-300">
+                                    <i
+                                        class="<%= title.type %> <%= title.icon %> text-arcane text-xl group-hover:text-gold transition-colors duration-300"></i>
+                                </div>
+                                <h2
+                                    class="text-xl font-cinzel text-gold group-hover:text-arcane transition-colors duration-300">
+                                    <%= title.name %>
+                                </h2>
+                            </div>
+
+                            <p class="text-dimmed text-sm italic mb-4 pl-12">
+                                <%= title.description %>
+                            </p>
+
+                            <div class="w-full h-4 bg-[#1F1F2E] rounded-full overflow-hidden border border-[#4B5563]">
+                                <div class="h-full bg-gold animate-fill-bar" style="width: <%= title.level %>%"></div>
+                            </div>
+
+                            <div class="flex justify-between items-center mt-2">
+                                <p class="text-xs ">Skill Level</p>
+                                <p class="text-xs text-gold font-medium">XP: <%= title.level %>%</p>
+                            </div>
+                        </div>
+                        <% }) %>
+            </div>
+        </section>
+
+        <style>
+            @keyframes fillBar {
+                0% {
+                    width: 0;
+                }
+            }
+
+            .animate-fill-bar {
+                animation: fillBar 1.2s ease-out forwards;
+            }
+        </style>
+
+
+        <%- include('../partials/footer.ejs') %>
+
+            <style>
+                @keyframes fillBar {
+                    0% {
+                        width: 0;
+                    }
+                }
+
+                .animate-fill-bar {
+                    animation: fillBar 1.2s ease-out forwards;
+                }
+
+                /* Level classes */
+                .level-65 {
+                    width: 65%;
+                }
+
+                .level-70 {
+                    width: 70%;
+                }
+
+                .level-75 {
+                    width: 75%;
+                }
+
+                .level-80 {
+                    width: 80%;
+                }
+
+                .level-85 {
+                    width: 85%;
+                }
+
+                .level-90 {
+                    width: 90%;
+                }
+            </style>
+</body>
+
+</html>
