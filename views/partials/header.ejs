@@ -4,51 +4,249 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="/styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter&display=swap" rel="stylesheet">
+  
+  <!-- Resource Hints -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preload" href="/styles.css" as="style">
+  <link rel="preload" href="/fonts/your-main-font.woff2" as="font" type="font/woff2" crossorigin>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Dhruv Kumar's portfolio - A full-stack developer's journey through digital realms. Explore projects, skills, and achievements.">
+  <meta name="keywords" content="Dhruv Kumar, full stack developer, web development, portfolio, JavaScript, Node.js, React">
+  <meta name="author" content="Dhruv Kumar">
+  
+  <!-- Open Graph / Social Media Meta Tags -->
+  <meta property="og:title" content="Hero's Journey - Dhruv Kumar's Portfolio">
+  <meta property="og:description" content="Explore the digital realms of a full-stack developer's journey">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="<%= process.env.SITE_URL %>">
+  <meta property="og:image" content="<%= process.env.SITE_URL %>/images/og-image.jpg">
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@BufferingBit">
+  <meta name="twitter:title" content="Hero's Journey - Dhruv Kumar's Portfolio">
+  <meta name="twitter:description" content="Explore the digital realms of a full-stack developer's journey">
+  <meta name="twitter:image" content="<%= process.env.SITE_URL %>/images/twitter-card.jpg">
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <title>"Hero's Chronicle"</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --space: #0F0F1A;
+      --gold: #c4ad64;
+      --gold-light: rgba(252, 211, 77, 0.1);
+      --gold-medium: rgba(252, 211, 77, 0.3);
+      --gold-dark: rgba(252, 211, 77, 0.7);
+      --steel: #4B5563;
+      --light: #F3F4F6;
+      --dimmed: #9CA3AF;
+      --arcane: #7C3AED;
+    }
+
+    header {
+      background: linear-gradient(to right, rgba(15, 15, 26, 0.95), rgba(31, 41, 55, 0.95));
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--gold-light);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 50;
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-medium), transparent);
+    }
+
+    .nav-link {
+      position: relative;
+      padding: 0.5rem 0;
+      font-family: 'Cinzel', serif;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gold);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .contact-btn {
+      background: linear-gradient(165deg, var(--gold), #8f7446);
+      background-size: 200% auto;
+      transition: all 0.3s ease;
+    }
+
+    .contact-btn:hover {
+      background-position: right center;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(252, 211, 77, 0.4);
+    }
+
+    .site-title {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      position: relative;
+    }
+
+    .site-title::before {
+      content: '⚔️';
+      position: absolute;
+      left: -30px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .site-title:hover::before {
+      opacity: 1;
+      left: -25px;
+    }
+
+    .mobile-menu {
+      background: linear-gradient(to bottom, rgba(15, 15, 26, 0.98), rgba(31, 41, 55, 0.98));
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--gold-light);
+      border-bottom: 1px solid var(--gold-light);
+    }
+
+    .mobile-nav-link {
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .mobile-nav-link::before {
+      content: '»';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-nav-link:hover::before {
+      opacity: 1;
+      left: 0.5rem;
+    }
+
+    /* Animation for menu button */
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    #menu-btn:hover {
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .site-title::before {
+        display: none;
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <header class="bg-steel text-light shadow-md">
+  <header class="text-light">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
       <!-- Left: Site Title -->
-      <div class="text-2xl font-bold tracking-widest">
-        <a href="/" class="hover:text-gold transition">Hero's Guild</a>
+      <div class="text-2xl">
+        <a href="/" class="site-title hover:text-gold transition">
+          Hero's Chronicle
+        </a>
       </div>
 
       <!-- Middle: Nav Links -->
-      <nav class="hidden md:flex space-x-6 font-medium">
-        <a href="/" class="hover:text-gold transition">Home</a>
-        <a href="/titles" class="hover:text-gold transition">Titles</a>
-        <a href="/inventory" class="hover:text-gold transition">Inventory</a>
-        <a href="/quests" class="hover:text-gold transition">Quests</a>
+      <nav class="hidden md:flex space-x-8">
+        <a href="/" class="nav-link hover:text-gold">Home</a>
+        <a href="/inventory" class="nav-link hover:text-gold">Inventory</a>
+        <a href="/quests" class="nav-link hover:text-gold">Quests</a>
+        <a href="/titles" class="nav-link hover:text-gold">Titles</a>
+        <a href="/about-me" class="nav-link hover:text-gold">Chronicle</a>
       </nav>
 
       <!-- Right: Icons or Toggles -->
-      <div class="flex items-center space-x-4">
-        <button id="toggle-music" class="hover:text-gold transition">
-          🎵
-        </button>
-        <a href="/contact"
-          class="bg-arcane hover:bg-gold text-light px-3 py-1 rounded-lg text-sm font-semibold transition">
-          Contact
+      <div class="flex items-center space-x-6">
+        <a href="/contact" class="contact-btn text-dark px-4 py-2 rounded-lg font-semibold transition flex items-center">
+          <span>Contact</span>
+          <i class="fas fa-envelope ml-2"></i>
         </a>
 
         <!-- Mobile Menu Button -->
-        <button id="menu-btn" class="md:hidden text-2xl focus:outline-none">☰</button>
+        <button id="menu-btn" class="md:hidden text-2xl focus:outline-none hover:text-gold transition">
+          <i class="fas fa-bars"></i>
+        </button>
       </div>
     </div>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="md:hidden hidden px-6 pb-4">
-      <a href="/" class="block py-2 hover:text-gold">Home</a>
-      <a href="/titles" class="block py-2 hover:text-gold">Titles</a>
-      <a href="/inventory" class="block py-2 hover:text-gold">Inventory</a>
+    <div id="mobile-menu" class="mobile-menu md:hidden hidden px-6 py-3 space-y-3">
+      <a href="/" class="mobile-nav-link block py-2 hover:text-gold">Home</a>
+      <a href="/inventory" class="mobile-nav-link block py-2 hover:text-gold">Inventory</a>
+      <a href="/quests" class="mobile-nav-link block py-2 hover:text-gold">Quests</a>
+      <a href="/titles" class="mobile-nav-link block py-2 hover:text-gold">Titles</a>
+      <a href="/about-me" class="mobile-nav-link block py-2 hover:text-gold">Chronicle</a>
+      <a href="/contact" class="mobile-nav-link block py-2 hover:text-gold">Contact</a>
     </div>
   </header>
 
+  <script>
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      menuBtn.innerHTML = mobileMenu.classList.contains('hidden') ? 
+        '<i class="fas fa-bars"></i>' : '<i class="fas fa-times"></i>';
+    });
+
+    // Close mobile menu when clicking on a link
+    document.querySelectorAll('#mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+      });
+    });
+
+    // Add scroll effect to header
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY > 10) {
+        header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.4)';
+        header.style.borderBottom = '1px solid var(--gold-medium)';
+      } else {
+        header.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.3)';
+        header.style.borderBottom = '1px solid var(--gold-light)';
+      }
+    });
+  </script>
 </body>
 
 </html>

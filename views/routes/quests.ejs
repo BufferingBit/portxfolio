@@ -4,20 +4,472 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quests</title>
+    <title>Quest Log | Hero's Journey</title>
     <link rel="stylesheet" href="/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        :root {
+            --space: #0F0F1A;
+            --gold: #FCD34D;
+            --gold-light: rgba(252, 211, 77, 0.1);
+            --gold-medium: rgba(252, 211, 77, 0.3);
+            --gold-dark: rgba(252, 211, 77, 0.7);
+            --steel: #4B5563;
+            --light: #F3F4F6;
+            --dimmed: #9CA3AF;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+        }
+
+        body {
+            background-color: var(--space);
+            color: var(--light);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+        }
+
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+
+        .text-gold {
+            color: var(--gold);
+        }
+
+        .text-dimmed {
+            color: var(--dimmed);
+        }
+
+        .bg-steel {
+            background-color: var(--steel);
+        }
+
+        .quests-header {
+            background: linear-gradient(145deg, rgba(15, 15, 26, 0.7), rgba(31, 41, 55, 0.4));
+            border: 1px solid var(--gold-light);
+            backdrop-filter: blur(8px);
+        }
+
+        .quest-filters {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(75, 85, 99, 0.3);
+            border: 1px solid var(--gold-light);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--gold-medium);
+            color: var(--space);
+            border-color: var(--gold);
+        }
+
+        .quest-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .quest-card {
+            background: linear-gradient(145deg, rgba(15, 15, 26, 0.7), rgba(31, 41, 55, 0.4));
+            border: 1px solid var(--gold-light);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(8px);
+        }
+
+        .quest-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold-medium), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .quest-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(15, 15, 26, 0.5);
+            border-color: var(--gold-medium);
+        }
+
+        .quest-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .quest-status {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .status-in-progress {
+            background: var(--warning);
+            color: var(--space);
+        }
+
+        .status-completed {
+            background: var(--success);
+            color: white;
+        }
+
+        .status-planned {
+            background: var(--info);
+            color: white;
+        }
+
+        .quest-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            padding-right: 2rem;
+        }
+
+        .quest-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .quest-difficulty {
+            display: flex;
+            align-items: center;
+        }
+
+        .difficulty-easy {
+            color: var(--success);
+        }
+
+        .difficulty-medium {
+            color: var(--warning);
+        }
+
+        .difficulty-hard {
+            color: var(--danger);
+        }
+
+        .quest-xp {
+            display: flex;
+            align-items: center;
+            color: var(--gold);
+        }
+
+        .quest-description {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .quest-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .quest-tag {
+            padding: 0.25rem 0.75rem;
+            background: rgba(75, 85, 99, 0.3);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+        }
+
+        .quest-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1.25rem;
+            background: linear-gradient(135deg, var(--gold-light), rgba(252, 211, 77, 0.05));
+            border: 1px solid var(--gold-light);
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--gold);
+            transition: all 0.3s ease;
+        }
+
+        .quest-btn:hover {
+            background: linear-gradient(135deg, var(--gold-medium), var(--gold-light));
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(252, 211, 77, 0.2);
+        }
+
+        .quest-btn i {
+            margin-right: 0.5rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-card {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .quest-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quest-filters {
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 
 <body class="bg-space text-light">
     <%- include('../partials/header.ejs') %>
 
-        <div class="container mx-auto px-4 py-8">
-            <h1 class="text-4xl font-bold text-center text-gold my-8">Quests</h1>
-        </div>
+        <main>
+            <section class="container mx-auto px-4 py-12">
+                <div class="max-w-6xl mx-auto">
+                    <!-- Header -->
+                    <div class="quests-header rounded-2xl p-8 mb-8 text-center">
+                        <h1 class="text-4xl md:text-5xl font-cinzel text-gold mb-4">
+                            <i class="fas fa-scroll mr-3"></i>Quest Log
+                        </h1>
+                        <p class="text-xl font-inter text-dimmed max-w-2xl mx-auto tracking-wide">
+                            Chronicles of completed, ongoing, and planned development quests
+                        </p>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="mb-8">
+                        <h2 class="text-xl font-cinzel text-gold mb-4">Filter Quests</h2>
+                        <div class="quest-filters">
+                            <button class="filter-btn active" data-filter="all">All Quests</button>
+                            <button class="filter-btn" data-filter="frontend">
+                                <i class="fas fa-laptop-code mr-2"></i>Frontend
+                            </button>
+                            <button class="filter-btn" data-filter="backend">
+                                <i class="fas fa-server mr-2"></i>Backend
+                            </button>
+                            <button class="filter-btn" data-filter="fullstack">
+                                <i class="fas fa-trophy mr-2"></i>Fullstack
+                            </button>
+                            <button class="filter-btn" data-filter="completed">
+                                <i class="fas fa-trophy mr-2"></i>Completed
+                            </button>
+                            <button class="filter-btn" data-filter="in-progress">
+                                <i class="fas fa-spinner mr-2"></i>In Progress
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quest Grid -->
+                    <div class="quest-grid">
+                        <!-- Eventure Project -->
+                        <div class="quest-card animate-card" data-category="fullstack completed" style="animation-delay: 0.1s">
+                            <div class="quest-status status-completed">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <h3 class="quest-title font-cinzel text-gold">Eventure Expedition</h3>
+                            <div class="quest-meta">
+                                <span class="quest-difficulty difficulty-hard">
+                                    <i class="fas fa-skull"></i> Hard
+                                </span>
+                                <span class="quest-xp">
+                                    <i class="fas fa-coins"></i> 500 XP
+                                </span>
+                            </div>
+                            <p class="quest-description text-dimmed">
+                                A full-stack event management application with user authentication, 
+                                PostgreSQL database, and responsive Tailwind CSS design.
+                            </p>
+                            <div class="quest-tags">
+                                <span class="quest-tag">HTML/CSS</span>
+                                <span class="quest-tag">Tailwind</span>
+                                <span class="quest-tag">Node.js</span>
+                                <span class="quest-tag">Express</span>
+                                <span class="quest-tag">EJS</span>
+                                <span class="quest-tag">PostgreSQL</span>
+                            </div>
+                            <a href="https://github.com/BufferingBit/Eventure" target="_blank" class="quest-btn">
+                                <i class="fas fa-code"></i> View Code
+                            </a>
+                        </div>
+                        <!-- Portfolio Project -->
+                        <div class="quest-card animate-card" data-category="frontend completed"
+                            style="animation-delay: 0.1s">
+                            <div class="quest-status status-completed">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <h3 class="quest-title font-cinzel text-gold">The Portfolio Chronicle</h3>
+                            <div class="quest-meta">
+                                <span class="quest-difficulty difficulty-medium">
+                                    <i class="fas fa-bolt"></i> Medium
+                                </span>
+                                <span class="quest-xp">
+                                    <i class="fas fa-coins"></i> 300 XP
+                                </span>
+                            </div>
+                            <p class="quest-description text-dimmed">
+                                A timeline-themed developer portfolio showcasing skills and projects. Built with
+                                Node.js, Express, and EJS templates.
+                            </p>
+                            <div class="quest-tags">
+                                <span class="quest-tag">HTML/CSS</span>
+                                <span class="quest-tag">JavaScript</span>
+                                <span class="quest-tag">Node.js</span>
+                                <span class="quest-tag">EJS</span>
+                            </div>
+                            <a href="https://github.com/BufferingBit/portxfolio" target="_blank" class="quest-btn">
+                                <i class="fas fa-code"></i> View Code
+                            </a>
+                        </div>
+
+                        <!-- Movie Tracker -->
+                        <div class="quest-card animate-card" data-category="backend completed"
+                            style="animation-delay: 0.2s">
+                            <div class="quest-status status-completed">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <h3 class="quest-title font-cinzel text-gold">Movie Tracker Quest</h3>
+                            <div class="quest-meta">
+                                <span class="quest-difficulty difficulty-medium">
+                                    <i class="fas fa-bolt"></i> Medium
+                                </span>
+                                <span class="quest-xp">
+                                    <i class="fas fa-coins"></i> 250 XP
+                                </span>
+                            </div>
+                            <p class="quest-description text-dimmed">
+                                Tracks watched movies with ratings. Features search functionality and local storage
+                                persistence.
+                            </p>
+                            <div class="quest-tags">
+                                <span class="quest-tag">HTML/CSS</span>
+                                <span class="quest-tag">JavaScript</span>
+                                <span class="quest-tag">EJS</span>
+                                <span class="quest-tag">PostgreSQL</span>
+                            </div>
+                            <a href="https://github.com/BufferingBit/MovieTracker" target="_blank" class="quest-btn">
+                                <i class="fas fa-code"></i> View Code
+                            </a>
+                        </div>
+
+                        <!-- Blog Page -->
+                        <div class="quest-card animate-card" data-category="frontend completed"
+                            style="animation-delay: 0.3s">
+                            <div class="quest-status status-completed">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <h3 class="quest-title font-cinzel text-gold">Blog Page Expedition</h3>
+                            <div class="quest-meta">
+                                <span class="quest-difficulty difficulty-easy">
+                                    <i class="fas fa-feather"></i> Easy
+                                </span>
+                                <span class="quest-xp">
+                                    <i class="fas fa-coins"></i> 200 XP
+                                </span>
+                            </div>
+                            <p class="quest-description text-dimmed">
+                                A responsive blog layout with article sections and clean typography. Focused on semantic
+                                HTML and CSS structure.
+                            </p>
+                            <div class="quest-tags">
+                                <span class="quest-tag">HTML/CSS</span>
+                                <span class="quest-tag">JavaScript</span>
+                                <span class="quest-tag">Express</span>
+                            </div>
+                            <a href="https://github.com/BufferingBit/blog-page" target="_blank" class="quest-btn">
+                                <i class="fas fa-code"></i> View Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
 
         <%- include('../partials/footer.ejs') %>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    // Filter functionality
+                    const filterBtns = document.querySelectorAll('.filter-btn');
+                    const questCards = document.querySelectorAll('.quest-card');
+
+                    filterBtns.forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            // Update active button
+                            filterBtns.forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+
+                            const filter = btn.dataset.filter;
+
+                            // Filter quests
+                            questCards.forEach(card => {
+                                if (filter === 'all' || card.dataset.category.includes(filter)) {
+                                    card.style.display = 'block';
+                                } else {
+                                    card.style.display = 'none';
+                                }
+                            });
+                        });
+                    });
+
+                    // Animate cards on scroll
+                    const animateOnScroll = () => {
+                        const cards = document.querySelectorAll('.animate-card');
+
+                        cards.forEach((card, index) => {
+                            const cardTop = card.getBoundingClientRect().top;
+                            const windowHeight = window.innerHeight;
+
+                            if (cardTop < windowHeight - 100) {
+                                card.style.animationDelay = `${index * 0.1}s`;
+                                card.style.opacity = '1';
+                            }
+                        });
+                    };
+
+                    // Initial animation
+                    animateOnScroll();
+
+                    // Animate on scroll
+                    window.addEventListener('scroll', animateOnScroll);
+                });
+            </script>
 </body>
 
 </html>

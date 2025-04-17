@@ -2,24 +2,202 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter&display=swap"
-        rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Footer</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --space: #0F0F1A;
+      --gold: #FCD34D;
+      --gold-light: rgba(252, 211, 77, 0.1);
+      --gold-medium: rgba(252, 211, 77, 0.3);
+      --gold-dark: rgba(252, 211, 77, 0.7);
+      --steel: #4B5563;
+      --light: #F3F4F6;
+      --dimmed: #9CA3AF;
+    }
 
+    footer {
+      background: linear-gradient(to right, rgba(15, 15, 26, 0.95), rgba(31, 41, 55, 0.95));
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--gold-light);
+      position: relative;
+      z-index: 10;
+    }
+
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-medium), transparent);
+    }
+
+    .footer-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-link {
+      position: relative;
+      font-family: 'Cinzel', serif;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      transition: all 0.3s ease;
+    }
+
+    .footer-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width 0.3s ease;
+    }
+
+    .footer-link:hover {
+      color: var(--gold);
+    }
+
+    .footer-link:hover::after {
+      width: 100%;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(75, 85, 99, 0.3);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .social-link:hover {
+      background: var(--gold);
+      color: var(--space);
+      transform: translateY(-3px);
+    }
+
+    .copyright {
+      font-size: 0.875rem;
+      color: var(--dimmed);
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .copyright a {
+      color: var(--gold);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .copyright a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-divider {
+      width: 100%;
+      max-width: 200px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-medium), transparent);
+      margin: 1rem auto;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .footer-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <footer class="bg-steel text-light py-6 mt-8">
-        <ul class="container mx-auto px-4 flex justify-center space-x-6">
-            <a href="/about-me" class="hover:text-gold cursor-pointer">About me</a>
-            <a href="https://github.com/BufferingBit" class="hover:text-gold cursor-pointer">Github</a>
-            <a href="https://www.linkedin.com/in/dhruv-kumar-2a06b2229/"
-                class="hover:text-gold cursor-pointer">LinkedIn</a>
-        </ul>
-    </footer>
+  <footer class="text-light py-8">
+    <div class="footer-container max-w-7xl mx-auto px-4">
+      <!-- Footer Links -->
+      <div class="footer-links">
+        <a href="/about-me" class="footer-link">The Chronicle</a>
+        <a href="/quests" class="footer-link">Quest Log</a>
+        <a href="/titles" class="footer-link">Titles</a>
+        <a href="/contact" class="footer-link">Send a Raven</a>
+      </div>
+
+      <div class="footer-divider"></div>
+
+      <!-- Social Links -->
+      <div class="social-links">
+        <a href="https://github.com/BufferingBit" class="social-link" aria-label="GitHub">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/dhruv-kumar-2a06b2229/" class="social-link" aria-label="LinkedIn">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a href="https://x.com/BufferingBit" class="social-link" aria-label="Twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </div>
+
+      <!-- Copyright -->
+      <div class="copyright">
+        &copy; <span id="year"></span> Hero's Chronicle. Crafted with <i class="fas fa-heart text-danger"></i> by <a href="/about-me">Dhruv Kumar</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Set current year in copyright
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Add animation to social links on hover
+    document.querySelectorAll('.social-link').forEach(link => {
+      link.addEventListener('mouseenter', () => {
+        link.style.boxShadow = '0 5px 15px rgba(252, 211, 77, 0.3)';
+      });
+      link.addEventListener('mouseleave', () => {
+        link.style.boxShadow = 'none';
+      });
+    });
+
+    // Smooth scroll for footer links
+    document.querySelectorAll('.footer-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        if (link.hash) {
+          e.preventDefault();
+          document.querySelector(link.hash).scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>

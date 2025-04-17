@@ -3,16 +3,23 @@ import path from "path";
 import { fileURLToPath } from "url";
 import env from "dotenv";
 import { Resend } from 'resend';
-
+import fetch from 'node-fetch';
+import NodeCache from 'node-cache';
+import compression from 'compression';
 
 env.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// Initialize cache with 30 minutes TTL
+const cache = new NodeCache({ stdTTL: 1800 });
+
 const app = express();
 const port = 3000;
 
+// Add compression middleware
+app.use(compression());
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -65,7 +72,37 @@ app.post('/contact', async (req, res) => {
       res.status(500).send('Failed to send message.');
     }
   });
+  app.get('/github-data', async (req, res) => {
+    try {
+        // Check cache first
+        const cachedData = cache.get('github_repos');
+        if (cachedData) {
+            return res.json(cachedData);
+        }
 
+        const response = await fetch('https://api.github.com/users/BufferingBit/repos?sort=updated&per_page=100');
+        const data = await response.json();
+        
+        const processedData = data.map(repo => ({
+            title: repo.name,
+            description: repo.description || "No description provided",
+            language: repo.language || "Various",
+            stars: repo.stargazers_count,
+            forks: repo.forks_count,
+            updated: new Date(repo.updated_at).toLocaleDateString(),
+            url: repo.html_url,
+            topics: repo.topics || []
+        }));
+
+        // Store in cache
+        cache.set('github_repos', processedData);
+        
+        res.json(processedData);
+    } catch (error) {
+        console.error('GitHub API error:', error);
+        res.status(500).json({ error: 'Failed to fetch GitHub data' });
+    }
+});
 
 
 

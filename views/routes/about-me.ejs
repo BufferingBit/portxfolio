@@ -4,35 +4,748 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Me</title>
+    <title>The Hero's Chronicle</title>
     <link rel="stylesheet" href="/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        :root {
+            --space: #0F0F1A;
+            --gold: #FCD34D;
+            --gold-light: rgba(252, 211, 77, 0.1);
+            --gold-medium: rgba(252, 211, 77, 0.3);
+            --gold-dark: rgba(252, 211, 77, 0.7);
+            --steel: #4B5563;
+            --light: #F3F4F6;
+            --dimmed: #9CA3AF;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --info: #3B82F6;
+        }
+
+        body {
+            background-color: var(--space);
+            color: var(--light);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+        }
+
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+
+        .text-gold {
+            color: var(--gold);
+        }
+
+        .text-dimmed {
+            color: var(--dimmed);
+        }
+
+        .bg-steel {
+            background-color: var(--steel);
+        }
+
+        .character-card {
+            background: linear-gradient(145deg, rgba(15, 15, 26, 0.7), rgba(31, 41, 55, 0.4));
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--gold-light);
+            box-shadow: 0 10px 30px rgba(15, 15, 26, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, var(--gold-light), transparent 70%);
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .character-avatar {
+            width: 10rem;
+            height: 10rem;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(59, 130, 246, 0.2), transparent);
+            border: 3px solid var(--gold-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            box-shadow: 0 0 30px rgba(252, 211, 77, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .character-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(252, 211, 77, 0.4);
+        }
+
+        .character-avatar::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, var(--gold-light), transparent 70%);
+            animation: rotate 15s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-bar {
+            height: 0.5rem;
+            background: rgba(156, 163, 175, 0.2);
+            border-radius: 9999px;
+            overflow: hidden;
+            flex-grow: 1;
+            margin-left: 0.75rem;
+        }
+
+        .stat-fill {
+            height: 100%;
+            border-radius: 9999px;
+            background: linear-gradient(90deg, var(--gold-medium), var(--gold-dark));
+            transition: width 1.5s ease-in;
+        }
+
+        .xp-bar {
+            height: 0.5rem;
+            background: rgba(156, 163, 175, 0.2);
+            border-radius: 9999px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .xp-fill {
+            height: 100%;
+            border-radius: 9999px;
+            background: linear-gradient(90deg, var(--gold-dark), #FDE68A);
+        }
+
+        .timeline-container {
+            position: relative;
+            padding-left: 2.5rem;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, 
+                transparent, 
+                var(--gold-dark), 
+                var(--gold-dark), 
+                transparent);
+            background-size: 100% 200%;
+            animation: lineGrow 2s ease-out forwards;
+        }
+
+        @keyframes lineGrow {
+            from { background-position: 0% 100%; }
+            to { background-position: 0% 0%; }
+        }
+
+        .timeline-node {
+            position: absolute;
+            left: -12px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: var(--space);
+            border: 4px solid var(--gold);
+            box-shadow: 0 0 15px var(--gold-medium);
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-node::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 2.5rem;
+            height: 2px;
+            background: linear-gradient(to right, var(--gold-medium), transparent);
+            transform: translateY(-50%);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item:hover .timeline-node {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--gold-dark);
+        }
+
+        .timeline-item:hover .timeline-node::before {
+            width: 3rem;
+            background: linear-gradient(to right, var(--gold-dark), transparent);
+        }
+
+        .timeline-content {
+            background: linear-gradient(145deg, rgba(15, 15, 26, 0.7), rgba(31, 41, 55, 0.4));
+            border: 1px solid var(--gold-light);
+            border-radius: 1rem;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-item:hover .timeline-content {
+            border-color: var(--gold-medium);
+            box-shadow: 0 10px 25px rgba(15, 15, 26, 0.5);
+            transform: translateX(5px);
+        }
+
+        .timeline-icon {
+            font-size: 2.5rem;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+            text-shadow: 0 0 10px var(--gold-medium);
+        }
+
+        .timeline-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.75rem;
+            margin-bottom: 0.25rem;
+            letter-spacing: 0.05em;
+        }
+
+        .timeline-subtitle {
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+        }
+
+        .skill-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: rgba(75, 85, 99, 0.4);
+            border: 1px solid var(--gold-light);
+            border-radius: 0.5rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .skill-badge:hover {
+            background: rgba(75, 85, 99, 0.6);
+            border-color: var(--gold-medium);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(252, 211, 77, 0.2);
+        }
+
+        .skill-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.5rem;
+            background: var(--gold-light);
+            color: var(--gold);
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .quest-card {
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+            border-left: 3px solid var(--gold);
+            transition: all 0.3s ease;
+        }
+
+        .quest-card:hover {
+            background: rgba(55, 65, 81, 0.5);
+            border-color: var(--gold-medium);
+            transform: translateY(-3px);
+        }
+
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--gold-light), rgba(252, 211, 77, 0.05));
+            border: 1px solid var(--gold-light);
+            border-radius: 0.75rem;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: var(--gold);
+            transition: all 0.3s ease;
+        }
+
+        .action-button:hover {
+            background: linear-gradient(135deg, var(--gold-medium), var(--gold-light));
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(252, 211, 77, 0.2);
+            border-color: var(--gold-dark);
+        }
+
+        .action-button svg {
+            margin-left: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .action-button:hover svg {
+            transform: translateX(3px);
+        }
+
+        /* Floating animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Parchment texture */
+        .parchment {
+            background-image: url('https://www.transparenttextures.com/patterns/old-paper.png');
+            background-blend-mode: overlay;
+            background-size: 300px;
+            background-opacity: 0.1;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .timeline-container {
+                padding-left: 2rem;
+            }
+            
+            .timeline-node {
+                left: -10px;
+                width: 24px;
+                height: 24px;
+            }
+            
+            .timeline-content {
+                padding: 1.5rem;
+            }
+            
+            .timeline-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .timeline-icon {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+        #font-style-change {
+            font-family: 'Cinzel', serif;
+        }
+
+    </style>
 </head>
 
 <body class="bg-space text-light">
     <%- include('../partials/header.ejs') %>
-
-        <div class="container mx-auto px-4 py-8">
-            <h1 class="text-4xl font-bold text-center text-gold my-8">About Me</h1>
-
-            <div class="bg-steel rounded-lg shadow-md p-6 mb-8">
-                <p class="text-dimmed mb-4">Welcome to my portfolio website!</p>
-                <p class="mb-4">I am a passionate developer with a love for creating beautiful and functional web
-                    applications.</p>
-                <p class="mb-4">My skills include:</p>
-                <ul class="list-disc pl-6 mb-4 space-y-2">
-                    <li>Frontend Development (HTML, CSS, JavaScript)</li>
-                    <li>Backend Development (Node.js, Express)</li>
-                    <li>Database Management</li>
-                    <li>UI/UX Design</li>
-                </ul>
-                <p>Feel free to <a href="/contact" class="text-arcane hover:text-gold">contact me</a> for any inquiries!
+    <main>
+        <section class="container mx-auto px-4 py-12">
+            <div class="text-center mb-16 animate__animated animate__fadeIn">
+                <h1 class="text-4xl md:text-5xl font-cinzel text-gold mb-4">
+                    📜 The Code Wizard's Tome
+                </h1>
+                <p class="text-xl text-dimmed max-w-2xl mx-auto">
+                    Chronicles of <span class="text-gold" id="font-style-change">Dhruv Kumar</span> - A full-stack developer's odyssey through digital realms
                 </p>
             </div>
-        </div>
 
-        <%- include('../partials/footer.ejs') %>
+            <div class="max-w-4xl mx-auto">
+                <!-- Character Card -->
+                <div class="character-card rounded-2xl p-8 mb-12 parchment">
+                    <div class="md:flex items-center">
+                        <div class="md:w-1/3 flex justify-center mb-8 md:mb-0">
+                            <div class="character-avatar floating">
+                                <span>👨🏿</span>
+                                <!-- Floating runes -->
+                                <span class="absolute -top-2 -left-2 text-xs opacity-60">⚡</span>
+                                <span class="absolute -bottom-2 -right-2 text-xs opacity-60">🔮</span>
+                            </div>
+                        </div>
+                        <div class="md:w-2/3 md:pl-8">
+                            <h2 class="text-3xl font-cinzel text-gold mb-2 flex items-center">
+                                Dhruv Kumar 
+                                <span class="ml-3 text-sm px-2 py-1 bg-gold/10 rounded-full">Lv. 27</span>
+                            </h2>
+                            <div class="text-dimmed mb-4">Full-Stack Developer | Digital Artisan</div>
+
+                            <!-- XP Progress -->
+                            <div class="mb-6">
+                                <div class="flex justify-between text-xs text-dimmed">
+                                    <span>XP: 12,450/15,000</span>
+                                    <span>83% to next level</span>
+                                </div>
+                                <div class="xp-bar">
+                                    <div class="xp-fill" style="width: 83%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Character Stats -->
+                            <div class="mb-6">
+                                <div class="stat-item">
+                                    <span class="w-24 text-sm">Strength</span>
+                                    <div class="stat-bar">
+                                        <div class="stat-fill" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="w-24 text-sm">Intelligence</span>
+                                    <div class="stat-bar">
+                                        <div class="stat-fill" style="width: 90%"></div>
+                                    </div>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="w-24 text-sm">Creativity</span>
+                                    <div class="stat-bar">
+                                        <div class="stat-fill" style="width: 88%"></div>
+                                    </div>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="w-24 text-sm">Persistence</span>
+                                    <div class="stat-bar">
+                                        <div class="stat-fill" style="width: 95%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-gold/10 pt-4">
+                                <p class="text-sm text-dimmed italic">
+                                    "I turn coffee into code and dreams into digital reality. The keyboard is my sword, and logic is my shield."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Container -->
+                <div class="timeline-container">
+                    <!-- Timeline Line -->
+                    <div class="timeline-line"></div>
+
+                    <!-- Origin Story -->
+                    <div class="timeline-item" id="origin">
+                        <div class="timeline-node" style="top: 2rem;"></div>
+                        <div class="timeline-content">
+                            <div class="flex items-start mb-6">
+                                <div class="timeline-icon floating">📜</div>
+                                <div class="timeline-header">
+                                    <h2 class="timeline-title font-cinzel text-gold">Origin Story</h2>
+                                    <div class="timeline-subtitle text-dimmed">How the journey began</div>
+                                </div>
+                            </div>
+                            <p class="text-dimmed mb-6">
+                                My adventure began with a curiosity about how digital worlds are built. From simple HTML pages to complex web applications, each step has been a quest for knowledge and mastery. The early days were filled with ancient tomes (documentation) and mysterious incantations (console.log statements).
+                            </p>
+                            <div class="bg-steel/50 p-4 rounded-lg border border-gold/10 mb-6">
+                                <div class="text-gold text-sm mb-2">First Lines of Code Discovered:</div>
+                                <div class="font-mono text-xs bg-black/30 p-3 rounded overflow-x-auto">
+                                    &lt;html&gt;<br>
+                                    &nbsp;&nbsp;&lt;body&gt;<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;Hello World!&lt;/h1&gt;<br>
+                                    &nbsp;&nbsp;&lt;/body&gt;<br>
+                                    &lt;/html&gt;
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Class Specialization -->
+                    <div class="timeline-item" id="specialization">
+                        <div class="timeline-node" style="top: 2rem;"></div>
+                        <div class="timeline-content">
+                            <div class="flex items-start mb-6">
+                                <div class="timeline-icon floating">⚔️</div>
+                                <div class="timeline-header">
+                                    <h2 class="timeline-title font-cinzel text-gold">Class Specialization</h2>
+                                    <div class="timeline-subtitle text-dimmed">Mastered abilities</div>
+                                </div>
+                            </div>
+                            <p class="text-dimmed mb-6">
+                                As a Full-Stack Developer, I've specialized in both frontend and backend magic, creating seamless experiences across the digital realm. Through countless battles with bugs and complex challenges, I've honed these skills to legendary status.
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div class="quest-card p-4 rounded-lg">
+                                    <div class="font-medium text-gold mb-2">Frontend Magic</div>
+                                    <div class="text-xs text-dimmed">Tailwind CSS, JavaScript</div>
+                                </div>
+                                <div class="quest-card p-4 rounded-lg">
+                                    <div class="font-medium text-gold mb-2">Backend Sorcery</div>
+                                    <div class="text-xs text-dimmed">Node.js, Express, MongoDB, PostgreSQL</div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <div class="skill-badge">
+                                    <span class="skill-icon">JS</span>
+                                    <span>JavaScript Wizardry</span>
+                                </div>
+                                <div class="skill-badge">
+                                    <span class="skill-icon">N</span>
+                                    <span>Node.js Enchantments</span>
+                                </div>
+                                <div class="skill-badge">
+                                    <span class="skill-icon">DB</span>
+                                    <span>Database Conjuring</span>
+                                </div>
+                                <div class="skill-badge">
+                                    <span class="skill-icon">UI</span>
+                                    <span>UI/UX Crafting</span>
+                                </div>
+                                <div class="skill-badge">
+                                    <span class="skill-icon">API</span>
+                                    <span>API Summoning</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Epic Quests -->
+                    <div class="timeline-item" id="quests">
+                        <div class="timeline-node" style="top: 2rem;"></div>
+                        <div class="timeline-content">
+                            <div class="flex items-start mb-6">
+                                <div class="timeline-icon floating">🏆</div>
+                                <div class="timeline-header">
+                                    <h2 class="timeline-title font-cinzel text-gold">Epic Quests</h2>
+                                    <div class="timeline-subtitle text-dimmed">Notable achievements</div>
+                                </div>
+                            </div>
+                            <p class="text-dimmed mb-6">
+                                Throughout my journey, I've completed numerous quests, from slaying complex algorithms to crafting elegant user interfaces. Each project has been a battle fought and a lesson learned.
+                            </p>
+                            <div class="space-y-4">
+                                <!-- Portfolio Project -->
+                                <div class="quest-card p-4 rounded-lg group">
+                                    <div class="font-medium text-gold flex items-center">
+                                        <span class="mr-2 group-hover:text-yellow-300">🏰</span>
+                                        The Portfolio Chronicle
+                                    </div>
+                                    <div class="text-sm text-dimmed mt-2">
+                                        Your current timeline-themed portfolio showcasing your developer journey. Built with Node.js, Express, and EJS templates with interactive elements.
+                                    </div>
+                                    <div class="mt-3 flex flex-wrap gap-1">
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">Node.js</span>
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">Express</span>
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">EJS</span>
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">Tailwind</span>
+                                    </div>
+                                    <div class="mt-3 flex gap-3">
+                                        <a href="https://github.com/BufferingBit/portfolio" target="_blank" class="text-xs text-gold hover:underline flex items-center">
+                                            <i class="fas fa-code mr-1"></i> View Code
+                                        </a>
+                                        <a href="/" target="_blank" class="text-xs text-gold hover:underline flex items-center">
+                                            <i class="fas fa-external-link-alt mr-1"></i> Live Demo
+                                        </a>
+                                    </div>
+                                </div>
+                            
+                                <!-- Eventure -->
+                                <div class="quest-card p-4 rounded-lg group">
+                                    <div class="font-medium text-gold flex items-center">
+                                        <span class="mr-2 group-hover:text-yellow-300">🎪</span>
+                                        The Eventure Expedition
+                                    </div>
+                                    <div class="text-sm text-dimmed mt-2">
+                                        An club-event management application with user authentication and CRUD functionality for events, with hierarchical admin controls. My first full-stack project.
+                                    </div>
+                                    <div class="mt-3 flex flex-wrap gap-1">
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">Node.js</span>
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">Express</span>
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">PostgreSQL</span>
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">EJS</span>
+                                    </div>
+                                    <div class="mt-3">
+                                        <a href="https://github.com/BufferingBit/Eventure" target="_blank" class="text-xs text-gold hover:underline flex items-center">
+                                            <i class="fas fa-code mr-1"></i> View Code
+                                        </a>
+                                        <a href="https://eventure-lme6.onrender.com" target="_blank" class="text-xs text-gold hover:underline flex items-center">
+                                            <i class="fas fa-external-link-alt mr-1"></i> Live Demo
+                                        </a>
+                                    </div>
+                                </div>
+                            
+                                <!-- Movie Tracker -->
+                                <div class="quest-card p-4 rounded-lg group">
+                                    <div class="font-medium text-gold flex items-center">
+                                        <span class="mr-2 group-hover:text-yellow-300">🎬</span>
+                                        The Movie Tracker Quest
+                                    </div>
+                                    <div class="text-sm text-dimmed mt-2">
+                                        A web application to track watched movies with rating system. Features include search functionality and movie details.
+                                    </div>
+                                    <div class="mt-3 flex flex-wrap gap-1">
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">Node.js</span>
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">Express</span>
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">API</span>
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">PostgreSQL</span>
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">Tailwind</span>
+                                    </div>
+                                    <div class="mt-3">
+                                        <a href="https://github.com/BufferingBit/movie-tracker" target="_blank" class="text-xs text-gold hover:underline flex items-center">
+                                            <i class="fas fa-code mr-1"></i> View Code
+                                        </a>
+                                    </div>
+                                </div>
+                            
+                                <!-- Blog Page -->
+                                <div class="quest-card p-4 rounded-lg group">
+                                    <div class="font-medium text-gold flex items-center">
+                                        <span class="mr-2 group-hover:text-yellow-300">📖</span>
+                                        The Blog Page Chronicles
+                                    </div>
+                                    <div class="text-sm text-dimmed mt-2">
+                                        A responsive blog platform with article management features. Implemented clean UI design and content organization.
+                                    </div>
+                                    <div class="mt-3 flex flex-wrap gap-1">
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">HTML</span>
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">Tailwind</span>
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">JavaScript</span>
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">Node.js</span>
+                                        <span class="text-xs px-2 py-1 bg-gold/10 rounded-full">Express</span>
+                                    </div>
+                                    <div class="mt-3">
+                                        <a href="https://github.com/BufferingBit/blog-page" target="_blank" class="text-xs text-gold hover:underline flex items-center">
+                                            <i class="fas fa-code mr-1"></i> View Code
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Current Chapter -->
+                    <div class="timeline-item" id="current">
+                        <div class="timeline-node" style="top: 2rem;"></div>
+                        <div class="timeline-content">
+                            <div class="flex items-start mb-6">
+                                <div class="timeline-icon floating">📖</div>
+                                <div class="timeline-header">
+                                    <h2 class="timeline-title font-cinzel text-gold">Current Chapter</h2>
+                                    <div class="timeline-subtitle text-dimmed">The ongoing adventure</div>
+                                </div>
+                            </div>
+                            <p class="text-dimmed mb-6">
+                                My current quest involves mastering advanced technologies and creating innovative solutions to complex problems. The adventure continues as I explore new realms of development, always seeking to level up my skills.
+                            </p>
+                            
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+                                <div class="bg-steel/50 p-3 rounded border border-gold/20 text-center">
+                                    <div class="text-xs text-dimmed mb-1">[In Progress]</div>
+                                    <div class="text-sm">DSA Mastery</div>
+                                </div>
+                                <div class="bg-steel/50 p-3 rounded border border-gold/20 text-center">
+                                    <div class="text-xs text-dimmed mb-1">[New]</div>
+                                    <div class="text-sm">Web3 Exploration</div>
+                                </div>
+                                <div class="bg-steel/50 p-3 rounded border border-gold/20 text-center">
+                                    <div class="text-xs text-dimmed mb-1">[Research]</div>
+                                    <div class="text-sm">AI Integration</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-end">
+                                <a href="/quests" class="action-button">
+                                    <span>View Quest Log</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quest Counter -->
+                <div class="text-center mt-16 text-dimmed text-sm">
+                    <div class="inline-flex items-center bg-steel/50 px-6 py-3 rounded-full">
+                        <span class="mr-2">🏆</span>
+                        <span>Completed Quests: <span class="text-gold">47</span></span>
+                        <span class="mx-2">•</span>
+                        <span>Current Streak: <span class="text-gold">128 days</span></span>
+                        <span class="mx-2">•</span>
+                        <span>Bugs Defeated: <span class="text-gold">1,024</span></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <%- include('../partials/footer.ejs') %>
+
+    <script>
+        // Animate timeline items as they come into view
+        document.addEventListener('DOMContentLoaded', function() {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                        
+                        // Animate stat bars
+                        if (entry.target.id === 'origin') {
+                            const statFills = document.querySelectorAll('.stat-fill');
+                            statFills.forEach(bar => {
+                                const finalWidth = bar.style.width;
+                                bar.style.width = '0';
+                                // Force reflow
+                                bar.offsetHeight;
+                                bar.style.width = finalWidth;
+                            });
+                        }
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            });
+
+            timelineItems.forEach(item => {
+                observer.observe(item);
+            });
+        });
+    </script>
 </body>
-
 </html>
