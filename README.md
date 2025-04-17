@@ -112,6 +112,15 @@ services:
 - `RESEND_API_KEY`: API key for Resend email service
 - `YOUR_MAIL_URL`: Email address for contact form submissions
 
+
+## Acknowledgments  
+This project was developed independently, with assistance from the following AI tools for efficiency:
+- **Augment AI**: Used for code snippet suggestions during development.
+- **ChatGPT**: Assisted with debugging complex logic issues.
+- **DeepSeek**: Helped refine styling and layout concepts.
+
+All AI-generated content was manually reviewed, adapted, and implemented by me. Final architecture and creative decisions are my own.
+
 ## 📝 License
 
 ISC
