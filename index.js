@@ -16,7 +16,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const cache = new NodeCache({ stdTTL: 1800 });
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Add compression middleware
 app.use(compression());
@@ -109,5 +109,5 @@ app.post('/contact', async (req, res) => {
 
 
 app.listen(port, () => {
-  console.log(`listening on port ${port}`);
+  console.log(`Server running on port ${port}`);
 });
