@@ -3,13 +3,11 @@ services:
     name: portfolio
     env: node
     buildCommand: npm install && npm run build:css
-    startCommand: npm start
+    startCommand: node index.js
     envVars:
       - key: NODE_ENV
         value: production
       - key: RESEND_API_KEY
         sync: false
       - key: YOUR_MAIL_URL
-        sync: false
-      - key: SITE_URL
         sync: false
